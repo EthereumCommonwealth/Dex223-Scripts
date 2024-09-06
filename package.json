@@ -11,7 +11,7 @@
     "base64-sol": "^1.1.0",
     "bignumber.js": "^9.1.2",
     "decimal.js": "^10.4.3",
-    "dex223-contracts": "https://github.com/Exzender/Dex223-contracts-fork",
+    "dex223-contracts": "https://github.com/EthereumCommonwealth/Dex223-contracts",
     "dotenv": "^16.3.1",
     "mocha": "^10.4.0",
     "mocha-chai-jest-snapshot": "^1.1.4"
