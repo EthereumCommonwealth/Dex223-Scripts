@@ -1,0 +1,225 @@
+{
+  "contractFile": "dex223/Quoter",
+  "contractName": "Quoter",
+  "contractAddress": "0x5bf0FD2874B54CD42a7b7F19E98a2AdA8c9A756d",
+  "abi": [
+    {
+      "type": "constructor",
+      "stateMutability": "undefined",
+      "payable": false,
+      "inputs": [
+        {
+          "type": "address",
+          "name": "_factory"
+        },
+        {
+          "type": "address",
+          "name": "_WETH9"
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "WETH9",
+      "constant": true,
+      "stateMutability": "view",
+      "payable": false,
+      "inputs": [],
+      "outputs": [
+        {
+          "type": "address",
+          "name": ""
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "call_sender",
+      "constant": true,
+      "stateMutability": "view",
+      "payable": false,
+      "inputs": [],
+      "outputs": [
+        {
+          "type": "address",
+          "name": ""
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "factory",
+      "constant": true,
+      "stateMutability": "view",
+      "payable": false,
+      "inputs": [],
+      "outputs": [
+        {
+          "type": "address",
+          "name": ""
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "quoteExactInput",
+      "constant": false,
+      "payable": false,
+      "inputs": [
+        {
+          "type": "bytes",
+          "name": "path"
+        },
+        {
+          "type": "uint256",
+          "name": "amountIn"
+        }
+      ],
+      "outputs": [
+        {
+          "type": "uint256",
+          "name": "amountOut"
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "quoteExactInputSingle",
+      "constant": false,
+      "payable": false,
+      "inputs": [
+        {
+          "type": "address",
+          "name": "tokenIn"
+        },
+        {
+          "type": "address",
+          "name": "tokenOut"
+        },
+        {
+          "type": "uint24",
+          "name": "fee"
+        },
+        {
+          "type": "uint256",
+          "name": "amountIn"
+        },
+        {
+          "type": "uint160",
+          "name": "sqrtPriceLimitX96"
+        }
+      ],
+      "outputs": [
+        {
+          "type": "uint256",
+          "name": "amountOut"
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "quoteExactOutput",
+      "constant": false,
+      "payable": false,
+      "inputs": [
+        {
+          "type": "bytes",
+          "name": "path"
+        },
+        {
+          "type": "uint256",
+          "name": "amountOut"
+        }
+      ],
+      "outputs": [
+        {
+          "type": "uint256",
+          "name": "amountIn"
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "quoteExactOutputSingle",
+      "constant": false,
+      "payable": false,
+      "inputs": [
+        {
+          "type": "address",
+          "name": "tokenIn"
+        },
+        {
+          "type": "address",
+          "name": "tokenOut"
+        },
+        {
+          "type": "uint24",
+          "name": "fee"
+        },
+        {
+          "type": "uint256",
+          "name": "amountOut"
+        },
+        {
+          "type": "uint160",
+          "name": "sqrtPriceLimitX96"
+        }
+      ],
+      "outputs": [
+        {
+          "type": "uint256",
+          "name": "amountIn"
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "tokenReceived",
+      "constant": false,
+      "payable": false,
+      "inputs": [
+        {
+          "type": "address",
+          "name": "_from"
+        },
+        {
+          "type": "uint256",
+          "name": "_value"
+        },
+        {
+          "type": "bytes",
+          "name": "_data"
+        }
+      ],
+      "outputs": [
+        {
+          "type": "bytes4",
+          "name": ""
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "uniswapV3SwapCallback",
+      "constant": true,
+      "stateMutability": "view",
+      "payable": false,
+      "inputs": [
+        {
+          "type": "int256",
+          "name": "amount0Delta"
+        },
+        {
+          "type": "int256",
+          "name": "amount1Delta"
+        },
+        {
+          "type": "bytes",
+          "name": "path"
+        }
+      ],
+      "outputs": []
+    }
+  ],
+  "startBlock": 9
+}

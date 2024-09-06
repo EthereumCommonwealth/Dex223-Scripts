@@ -1,0 +1,72 @@
+{
+  "contractFile": "dex223/AddressHelper",
+  "contractName": "AddressHelper",
+  "contractAddress": "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707",
+  "abi": [
+    {
+      "type": "function",
+      "name": "computeAddress",
+      "constant": true,
+      "stateMutability": "pure",
+      "payable": false,
+      "inputs": [
+        {
+          "type": "address",
+          "name": "factory"
+        },
+        {
+          "type": "address",
+          "name": "tokenA"
+        },
+        {
+          "type": "address",
+          "name": "tokenB"
+        },
+        {
+          "type": "uint24",
+          "name": "fee"
+        }
+      ],
+      "outputs": [
+        {
+          "type": "address",
+          "name": "_pool"
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "getPoolCreationCode",
+      "constant": true,
+      "stateMutability": "pure",
+      "payable": false,
+      "inputs": [],
+      "outputs": [
+        {
+          "type": "bytes",
+          "name": ""
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "hashPoolCode",
+      "constant": true,
+      "stateMutability": "pure",
+      "payable": false,
+      "inputs": [
+        {
+          "type": "bytes",
+          "name": "creation_code"
+        }
+      ],
+      "outputs": [
+        {
+          "type": "bytes32",
+          "name": "pool_hash"
+        }
+      ]
+    }
+  ],
+  "startBlock": 6
+}
