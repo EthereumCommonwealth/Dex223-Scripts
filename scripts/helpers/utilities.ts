@@ -1,10 +1,11 @@
-import { BaseContract, Wallet, ContractTransactionResponse } from 'ethers'
+import {BaseContract, Wallet, ContractTransactionResponse, Contract} from 'ethers'
 import { ethers } from 'hardhat'
-import { TestUniswapV3Callee, ERC223HybridToken } from '../../typechain-types'
+import {TestUniswapV3Callee, ERC223HybridToken, ERC20Token, IERC223} from '../../typechain-types'
 import { TestUniswapV3Router } from '../../typechain-types'
 import { MockTimeDex223Pool } from '../../typechain-types'
 import { TestERC20 } from '../../typechain-types'
 import bn from 'bignumber.js'
+import {Token} from "@uniswap/sdk-core";
 // import {TypedContractMethod} from "../typechain-types/common";
 
 export const MaxUint128 = 2n ** 128n - 1n
@@ -307,6 +308,42 @@ export function createPoolFunctions({
     // flash,
   }
 }
+
+export async function getPoolData(poolContract: Contract) {
+  const [tickSpacing, fee, liquidity, slot0] = await Promise.all([
+    poolContract.tickSpacing(),
+    poolContract.fee(),
+    poolContract.liquidity(),
+    poolContract.slot0(),
+  ]);
+
+  return {
+    tickSpacing: tickSpacing,
+    fee: Number(fee),
+    liquidity: liquidity,
+    sqrtPriceX96: slot0[0],
+    tick: Number(slot0[1]),
+  };
+}
+
+const provider = ethers.provider;
+
+export async function getToken(token: ERC20Token | IERC223): Promise<Token> {
+  const chaindId: number = Number((await provider.getNetwork()).chainId);
+  const [symbol, name, decimals] = await Promise.all([
+    token.symbol(),
+    token.name(),
+    token.decimals(),
+  ]);
+  return new Token(
+      chaindId,
+      String(token.target),
+      Number(decimals),
+      symbol,
+      name
+  );
+}
+
 
 export interface MultiPoolFunctions {
   swapForExact0Multi: SwapFunction

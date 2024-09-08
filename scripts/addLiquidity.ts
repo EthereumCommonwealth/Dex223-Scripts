@@ -9,44 +9,14 @@ import {
   DexaransNonfungiblePositionManager, TokenStandardConverter,
 } from "../typechain-types";
 
+import { getPoolData, getToken } from "./helpers/utilities";
+
 import UniswapV3Pool from "../artifacts/contracts/dex-core/Dex223Pool.sol/Dex223Pool.json";
 import NONFUNGIBLE_POSITION_MANAGER from "../deployments/localhost/dex223/DexaransNonfungiblePositionManager/result.json";
 import CONVERTER from "../deployments/localhost/dex223/TokenConvertor/result.json";
 
 const provider = ethers.provider;
 
-export async function getPoolData(poolContract: Contract) {
-  const [tickSpacing, fee, liquidity, slot0] = await Promise.all([
-    poolContract.tickSpacing(),
-    poolContract.fee(),
-    poolContract.liquidity(),
-    poolContract.slot0(),
-  ]);
-
-  return {
-    tickSpacing: tickSpacing,
-    fee: Number(fee),
-    liquidity: liquidity,
-    sqrtPriceX96: slot0[0],
-    tick: Number(slot0[1]),
-  };
-}
-
-async function getToken(token: ERC20Token | IERC223): Promise<Token> {
-  const chaindId: number = Number((await provider.getNetwork()).chainId);
-  const [symbol, name, decimals] = await Promise.all([
-    token.symbol(),
-    token.name(),
-    token.decimals(),
-  ]);
-  return new Token(
-    chaindId,
-    String(token.target),
-    Number(decimals),
-    symbol,
-    name
-  );
-}
 
 export async function addLiquidity(
   poolAddress: string,

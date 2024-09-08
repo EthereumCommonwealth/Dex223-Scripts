@@ -23,10 +23,11 @@ import Dex223PoolArtifact from "../artifacts/contracts/dex-core/Dex223Pool.sol/D
 import fs from 'fs';
 import path from 'path';
 import JSBI from "jsbi";
-import { encodePriceSqrt } from "./createPool";
-import { getPoolData } from "./addLiquidity";
+import { encodePriceSqrt } from "./helpers/utilities";
+import { getPoolData } from "./helpers/utilities";
 import { nearestUsableTick, Pool, Position } from "@uniswap/v3-sdk";
 import {BigintIsh, Token} from "@uniswap/sdk-core";
+import {sleep} from "@nomicfoundation/hardhat-verify/internal/utilities";
 
 const provider = ethers.provider;
 const folderPath = path.join(__dirname, 'tokens_lists');
@@ -176,10 +177,12 @@ async function calcLiquidity(
     poolAddress: string,
     token0: TokenObject,
     token1: TokenObject,
-    val: number
+    val: number,
+    signer: Wallet
 ) {
     const poolContract = new Contract(poolAddress, Dex223PoolArtifact.abi, provider);
-    const poolData = await getPoolData(poolContract);
+    const connectedContract = poolContract.connect(signer);
+    const poolData = await getPoolData(connectedContract as Contract);
 
     const liquidityBigInt = JSBI.BigInt(ethers.parseEther(val.toString()).toString());
 
@@ -221,7 +224,7 @@ async function prepareAddLiquidity(
     let signer_wallet = await getSigner(chainId);
     if (!signer_wallet) return;
 
-    const { poolData, position} = await calcLiquidity(poolAddress, token0, token1, val);
+    const { poolData, position} = await calcLiquidity(poolAddress, token0, token1, val, signer_wallet);
     
     const { amount0: amount0Desired, amount1: amount1Desired } =
         position.mintAmounts;
@@ -345,7 +348,7 @@ async function deployPool(
 
     const pp = preparePoolDeploy(token0, token1, fee);
 
-    const gas = gasPrice ? { gasLimit: 8_000_000, gasPrice: gasPrice.gasPrice } : { gasLimit: 8_000_000 };
+    const gas = gasPrice ? { gasLimit: 30_000_000, gasPrice: gasPrice.gasPrice } : { gasLimit: 30_000_000 };
     
     const tx = await nfpm
         .connect(signer_wallet)
@@ -459,10 +462,14 @@ async function main() {
             // deploy tokens
             const tokenFactory = await ethers.getContractFactory('contracts/TestTokens/Usdcoin.sol:UsdCoin');
             const tokenA = (await tokenFactory.connect(signer_wallet).deploy(gasPrice)) as TestERC20;
+            // console.dir(tokenA);
+            await sleep(10000);
             const tokenFactoryB = await ethers.getContractFactory('contracts/TestTokens/Tether.sol:Tether');
             const tokenB = (await tokenFactoryB.connect(signer_wallet).deploy(gasPrice)) as TestERC20;
-            const tokenA223 = await convertContract.predictWrapperAddress(tokenA.target, true);
-            const tokenB223 = await convertContract.predictWrapperAddress(tokenB.target, true);
+            await sleep(10000);
+            // console.dir(tokenB);
+            const tokenA223 = await convertContract.connect(signer_wallet).predictWrapperAddress(tokenA.target, true);
+            const tokenB223 = await convertContract.connect(signer_wallet).predictWrapperAddress(tokenB.target, true);
 
             let obj: TokenObject = {
                 chainId: Number(chainId),
@@ -497,9 +504,13 @@ async function main() {
         tokenA = tokenB;
         tokenB = tes;
     }
+    
+    // console.log(tokenA.address);
+    // console.log(tokenB.address);
+    // console.log(convertContract.target);
 
-    let tokenB_223address = await convertContract.predictWrapperAddress(tokenB.address, true);
-    let tokenA_223address = await convertContract.predictWrapperAddress(tokenA.address, true);
+    let tokenB_223address = await convertContract.connect(signer_wallet).predictWrapperAddress(tokenB.address, true);
+    let tokenA_223address = await convertContract.connect(signer_wallet).predictWrapperAddress(tokenA.address, true);
     const token223Contract = new Contract(
         tokenB_223address,
         ERC223.abi,
@@ -536,13 +547,13 @@ async function main() {
     // process.exit(0);
     
     // - pool create
-    console.log('\n-- 1. pool create GAS calc:')
-    let pool: string = await factoryContract.getPool(tokenA.address, tokenB.address, fee);
+    console.log('\n-- 1. pool create GAS calc:');
+    let pool: string = await factoryContract.connect(signer_wallet).getPool(tokenA.address, tokenB.address, fee);
     let newPool = false;
     if (pool === ethers.ZeroAddress) {
         try {
             const res = await deployPool(tokenA, tokenB, fee, nfpmContract, Number(chainId));
-            pool = await factoryContract.getPool(tokenA.address, tokenB.address, fee);
+            pool = await factoryContract.connect(signer_wallet).getPool(tokenA.address, tokenB.address, fee);
             console.log(`Created pool: ${pool}`);
             console.log(`gas usage: ${res?.gasUsed}`);
             // console.dir(res);
@@ -576,7 +587,7 @@ async function main() {
     
     // mint and approve minimum required  tokens for tests
     // maybe use fromAmount0 or fromAmount1 to get position
-    const { poolData, position} = await calcLiquidity(pool, tokenA, tokenB, 1);
+    const { poolData, position} = await calcLiquidity(pool, tokenA, tokenB, 1, signer_wallet);
 
     const minPosition = Position.fromAmount0({
             pool: position.pool, 
