@@ -26,8 +26,8 @@ import JSBI from "jsbi";
 import { encodePriceSqrt } from "./helpers/utilities";
 import { getPoolData } from "./helpers/utilities";
 import { nearestUsableTick, Pool, Position } from "@uniswap/v3-sdk";
-import {BigintIsh, Token} from "@uniswap/sdk-core";
-import {sleep} from "@nomicfoundation/hardhat-verify/internal/utilities";
+import { Token } from "@uniswap/sdk-core";
+import { sleep } from "@nomicfoundation/hardhat-verify/internal/utilities";
 
 const provider = ethers.provider;
 const folderPath = path.join(__dirname, 'tokens_lists');
@@ -128,7 +128,7 @@ async function mintApproveToken(tokenAddress: string, value: bigint, signer: Wal
 
     let bal = 0n;
     try {
-        bal = await tokenContract.balanceOf(signer);
+        bal = await connectedContract.balanceOf(signer);
         // console.log(`${tokenAddress} minted: ${bal}`);
     } catch (e) {
         console.log('Failed to get balance');
@@ -152,7 +152,7 @@ async function mintApproveToken(tokenAddress: string, value: bigint, signer: Wal
 
     let appr = 0n;
     try {
-        appr = await tokenContract.allowance(signer.address, targetAddress);
+        appr = await connectedContract.allowance(signer.address, targetAddress);
     } catch (e) {
         console.log('Failed to get approve');
     }
@@ -276,7 +276,7 @@ async function addLiquidity(
     const params = await prepareAddLiquidity( poolAddress, token0, token1, val, nfpm, chainId);
     console.log(params);
 
-    const gas = gasPrice ? { gasLimit: 8_000_000, gasPrice: gasPrice.gasPrice } : { gasLimit: 8_000_000 };
+    const gas = gasPrice?.gasPrice ? { gasLimit: 8_000_000, gasPrice: gasPrice.gasPrice } : { gasLimit: 100_000_000 };
     
     if (params) {
         const tx = await nfpm
@@ -348,7 +348,7 @@ async function deployPool(
 
     const pp = preparePoolDeploy(token0, token1, fee);
 
-    const gas = gasPrice ? { gasLimit: 30_000_000, gasPrice: gasPrice.gasPrice } : { gasLimit: 30_000_000 };
+    const gas = gasPrice?.gasPrice ? { gasLimit: 30_000_000, gasPrice: gasPrice.gasPrice } : { gasLimit: 100_000_000 };
     
     const tx = await nfpm
         .connect(signer_wallet)
@@ -545,15 +545,19 @@ async function main() {
     }
     
     // process.exit(0);
+
+    await sleep(5000);
     
     // - pool create
     console.log('\n-- 1. pool create GAS calc:');
-    let pool: string = await factoryContract.connect(signer_wallet).getPool(tokenA.address, tokenB.address, fee);
+    let pool: string = await factoryContract.connect(signer_wallet).getPool(tokenA.address, tokenB.address, fee);   
+    console.log(`Pool: ${pool}`);
     let newPool = false;
     if (pool === ethers.ZeroAddress) {
         try {
             const res = await deployPool(tokenA, tokenB, fee, nfpmContract, Number(chainId));
-            pool = await factoryContract.connect(signer_wallet).getPool(tokenA.address, tokenB.address, fee);
+            console.log(res);
+            pool = await factoryContract.connect(signer_wallet).getPool(tokenA.address, tokenB.address, fee);     
             console.log(`Created pool: ${pool}`);
             console.log(`gas usage: ${res?.gasUsed}`);
             // console.dir(res);
@@ -561,18 +565,21 @@ async function main() {
         } catch (e) {
             console.error('-- pool Create FAIL');
             console.error('-- pool create GAS calc FAIL');
+            console.error(e);
         }
     } else {
-        const pp = preparePoolDeploy(tokenA, tokenB, 500);
+        const pp = preparePoolDeploy(tokenA, tokenB, 10000);
 
         try {
-            const gas = gasPrice ? { gasLimit: 8_000_000, gasPrice: gasPrice.gasPrice } : { gasLimit: 8_000_000 };
+            const gas = gasPrice?.gasPrice ? { gasLimit: 8_000_000, gasPrice: gasPrice.gasPrice } : { gasLimit: 1_000_000_000 };
+            console.dir(gas);
             const tx = await nfpmContract
                 .connect(signer_wallet)
                 .createAndInitializePoolIfNecessary.estimateGas(pp.t1, pp.t2, pp.t3, pp.t4, pp.fee, pp.price,
                     gas);
             console.log(`gas usage: ${tx}`);
         } catch (e) {
+            console.error(e);
             console.error('-- pool create GAS calc FAIL');
         }
     }
@@ -620,7 +627,7 @@ async function main() {
 
         let bal = 0n;
         try {
-            bal = await token223Contract.balanceOf(signer_wallet.address);
+            bal = await token223Contract.connect(signer_wallet).balanceOf(signer_wallet.address);
         } catch (e) {}
         if (bal < amount1int + 1n) {
             await mintApproveToken(token1address, amount1int + 1n, signer_wallet, convertContract.target.toString());
@@ -643,6 +650,8 @@ async function main() {
         await mintApproveToken(token1address, mintAmount1, signer_wallet, nfpmContract.target.toString());
     }
 
+    await sleep(5000);
+    
     // - mint position
     console.log('\n-- 2. mint position GAS calc:');
 
@@ -663,21 +672,21 @@ async function main() {
         recipient: signer_wallet.address,
         deadline: Math.floor(Date.now() / 1000) + 60 * 10
     };
-    
+
+    const gas = gasPrice?.gasPrice ? { gasLimit: 8_000_000, gasPrice: gasPrice.gasPrice } : { gasLimit: 100_000_000 };
     if (newPool) {
         try {
             if (params) {
-                const gas = gasPrice ? { gasLimit: 8_000_000, gasPrice: gasPrice.gasPrice } : { gasLimit: 8_000_000 };
                 const tx = await nfpmContract
                     .connect(signer_wallet)
                     .mint(params, gas);
-                // console.dir(tx);
                 const res = await tx.wait();
                 console.log(`gas usage: ${res?.gasUsed}`);
             } else {
                 console.log(`gas usage: undefined`);
             }
         } catch (e) {
+            console.error(e);
             console.error('-- mint position GAS calc FAIL');
         }
     } else {
@@ -685,15 +694,18 @@ async function main() {
             if (params) {
                 const tx = await nfpmContract
                     .connect(signer_wallet)
-                    .mint.estimateGas(params, {gasLimit: 8_000_000});
+                    .mint.estimateGas(params, gas);
                 console.log(`gas usage: ${tx}`);
             } else {
                 console.log(`gas usage: undefined`);
             }
         } catch (e) {
+            console.error(e);
             console.error('-- mint position GAS calc FAIL');
         }
     }
+
+    await sleep(5000);
     
     console.log('\n-- 2.1. mint position (20-223) GAS calc:');
     try {
@@ -710,7 +722,7 @@ async function main() {
             const data = nfpmContract.interface.encodeFunctionData('mint', [callValues]);
             const bytes = ethers.getBytes(data);
             const tx = await token223Contract.connect(signer_wallet)
-                ['transfer(address,uint256,bytes)'].estimateGas(nfpmContract.target, amount1int, bytes, {gasLimit: 8_000_000});
+                ['transfer(address,uint256,bytes)'].estimateGas(nfpmContract.target, amount1int, bytes, gas);
             
             console.log(`gas usage: ${tx}`);
         } else {
@@ -723,12 +735,12 @@ async function main() {
     // process.exit(0);
     
     // Find tokenID
-    const numPositions = await nfpmContract.balanceOf(signer_wallet.address);
+    const numPositions = await nfpmContract.connect(signer_wallet).balanceOf(signer_wallet.address);
     
     const calls = [];
     for (let i = 0; i < numPositions; i++) {
         calls.push(
-            nfpmContract.tokenOfOwnerByIndex(signer_wallet.address, i)
+            nfpmContract.connect(signer_wallet).tokenOfOwnerByIndex(signer_wallet.address, i)
         );
     }
     const positionIds = await Promise.all(calls);
@@ -738,7 +750,7 @@ async function main() {
     
     let tokenId: bigint = 0n;
     for (let id of positionIds) {
-        const p = await nfpmContract.positions(id);
+        const p = await nfpmContract.connect(signer_wallet).positions(id);
         // console.dir(p);
         if (p.token0.toLowerCase() === token0address || p.token1.toLowerCase() === token0address) {
             if (p.token0.toLowerCase() === token1address || p.token1.toLowerCase() === token1address) {
@@ -749,7 +761,8 @@ async function main() {
             }
         }
     }
-    
+
+    await sleep(5000);
     // process.exit(0);
 
     // - increaseLiquidity ERC20
@@ -770,7 +783,7 @@ async function main() {
 
                 const tx = await nfpmContract
                     .connect(signer_wallet)
-                    .increaseLiquidity.estimateGas(ilParams, {gasLimit: 8_000_000});
+                    .increaseLiquidity.estimateGas(ilParams, gas);
                 console.log(`gas usage: ${tx}`);
             } else {
                 console.log(`Skipped - not found TokenID`);
@@ -780,7 +793,8 @@ async function main() {
             console.error(e);
         }
     }
-    
+
+    await sleep(5000);
     // - increaseLiquidity ERC223
     {
         console.log('\n-- 4. increaseLiquidity ERC20-ERC223 GAS calc:')
@@ -795,7 +809,7 @@ async function main() {
                 const data = nfpmContract.interface.encodeFunctionData('increaseLiquidity', [callValues]);
                 const bytes = ethers.getBytes(data);
                 const tx = await token223Contract.connect(signer_wallet)
-                    ['transfer(address,uint256,bytes)'].estimateGas(nfpmContract.target, amount1int, bytes, {gasLimit: 8_000_000});
+                    ['transfer(address,uint256,bytes)'].estimateGas(nfpmContract.target, amount1int, bytes, gas);
 
                 // const tx = await nfpmContract
                 //     .connect(signer_wallet)
@@ -809,7 +823,8 @@ async function main() {
             console.error(e);
         }
     }
-    
+
+    await sleep(5000);
     // - decrease liquidity
     {
         console.log('\n-- 5. decreaseLiquidity ERC20 GAS calc:')
@@ -826,7 +841,7 @@ async function main() {
 
                 const tx = await nfpmContract
                     .connect(signer_wallet)
-                    .decreaseLiquidity.estimateGas(ilParams, {gasLimit: 8_000_000});
+                    .decreaseLiquidity.estimateGas(ilParams, gas);
                 console.log(`gas usage: ${tx}`);
             } else {
                 console.log(`Skipped - not found TokenID`);
@@ -836,7 +851,8 @@ async function main() {
             console.error(e);
         }
     }
-    
+
+    await sleep(5000);
     // - collect
     {
         console.log('\n-- 6. collect ERC20 GAS calc:')
@@ -857,7 +873,7 @@ async function main() {
 
                 const tx = await nfpmContract
                     .connect(signer_wallet)
-                    .collect.estimateGas(ilParams, {gasLimit: 8_000_000});
+                    .collect.estimateGas(ilParams, gas);
                 console.log(`gas usage: ${tx}`);
             }   else {
                 console.log(`Skipped - not found TokenID`);
@@ -867,6 +883,7 @@ async function main() {
         }
     }
 
+    await sleep(5000);
     {
         console.log('\n-- 7. collect ERC223 GAS calc:')
 
@@ -886,7 +903,7 @@ async function main() {
 
                 const tx = await nfpmContract
                     .connect(signer_wallet)
-                    .collect.estimateGas(ilParams, {gasLimit: 8_000_000});
+                    .collect.estimateGas(ilParams, gas);
                 console.log(`gas usage: ${tx}`);
             }   else {
                 console.log(`Skipped - not found TokenID`);
@@ -895,7 +912,8 @@ async function main() {
             console.error('-- collect ERC223 GAS calc FAIL');
         }
     }
-    
+
+    await sleep(5000);
     // - router swap (20-20)
     {
         console.log('\n-- 8. router swap 20-20 GAS calc:')
@@ -915,14 +933,15 @@ async function main() {
 
             const tx = await routerContract
                 .connect(signer_wallet)
-                .exactInputSingle.estimateGas(ilParams, {gasLimit: 8_000_000});
+                .exactInputSingle.estimateGas(ilParams, gas);
             console.log(`gas usage: ${tx}`);
         } catch (e) {
             console.error('-- router swap 20-20 GAS calc FAIL');
             console.error(e);
         }
     }
-    
+
+    await sleep(5000);
     // - router swap (20-223) + convert
     {
         console.log('\n-- 9. router swap 20-223 + convert GAS calc:')
@@ -942,14 +961,15 @@ async function main() {
 
             const tx = await routerContract
                 .connect(signer_wallet)
-                .exactInputSingle.estimateGas(ilParams, {gasLimit: 8_000_000});
+                .exactInputSingle.estimateGas(ilParams, gas);
             console.log(`gas usage: ${tx}`);
         } catch (e) {
             console.error('-- router swap 20-223 GAS calc FAIL');
             console.error(e);
         }
     }
-    
+
+    await sleep(5000);
     // - router swap (20-223) + convert + deploy
     {
         console.log('\n-- 10. router swap 20-223 + convert + deploy GAS calc:')
@@ -969,14 +989,15 @@ async function main() {
 
             const tx = await routerContract
                 .connect(signer_wallet)
-                .exactInputSingle.estimateGas(ilParams, {gasLimit: 8_000_000});
+                .exactInputSingle.estimateGas(ilParams, gas);
             console.log(`gas usage: ${tx}`);
         } catch (e) {
             console.error('-- router swap 20-223 GAS calc FAIL');
             console.error(e);
         }
     }
-    
+
+    await sleep(5000);
     // - router swap (223-20)
     {
         console.log('\n-- 11. router swap 223-20 GAS calc:')
@@ -990,14 +1011,15 @@ async function main() {
             const data = routerContract.interface.encodeFunctionData('exactInputSingle', [callValues]);
             const bytes = ethers.getBytes(data)
             const tx = await token223Contract.connect(signer_wallet)
-                ['transfer(address,uint256,bytes)'].estimateGas(routerContract.target, 2n/*amount1int*/, bytes, {gasLimit: 8_000_000});
+                ['transfer(address,uint256,bytes)'].estimateGas(routerContract.target, 2n/*amount1int*/, bytes, gas);
             console.log(`gas usage: ${tx}`);
         } catch (e) {
             console.error('-- router swap 223-20 GAS calc FAIL');
             console.error(e);
         }
     }
-    
+
+    await sleep(5000);
     // - router swap (223-223) - if both tokens has 223 version ?
     {
         console.log('\n-- 12. router swap 223-223 + convert + deploy GAS calc:')
@@ -1011,14 +1033,15 @@ async function main() {
             const data = routerContract.interface.encodeFunctionData('exactInputSingle', [callValues]);
             const bytes = ethers.getBytes(data)
             const tx = await token223Contract.connect(signer_wallet)
-                ['transfer(address,uint256,bytes)'].estimateGas(routerContract.target, amount1int, bytes, {gasLimit: 8_000_000});
+                ['transfer(address,uint256,bytes)'].estimateGas(routerContract.target, amount1int, bytes, gas);
             console.log(`gas usage: ${tx}`);
         } catch (e) {
             console.error('-- router swap 223-223 GAS calc FAIL');
             console.error(e);
         }
     }
-    
+
+    await sleep(5000);
     // - direct pool swap
     {
         console.log('\n-- 13. direct pool swap 223-20 GAS calc:')
@@ -1038,14 +1061,15 @@ async function main() {
             const bytes = ethers.getBytes(data)
             const tx = await token223Contract.connect(signer_wallet)
                 // ['transfer(address,uint256,bytes)'](poolContract.target, amount1int, bytes, {gasLimit: 8_000_000});
-                ['transfer(address,uint256,bytes)'].estimateGas(poolContract.target, amount1int, bytes, {gasLimit: 8_000_000});
+                ['transfer(address,uint256,bytes)'].estimateGas(poolContract.target, amount1int, bytes, gas);
             console.log(`gas usage: ${tx}`);
         } catch (e) {
             console.error('-- direct pool swap 223-20 GAS calc FAIL');
             console.error(e);
         }
     }
-    
+
+    await sleep(5000);
     // - direct pool swap + convert + deploy
     {
         console.log('\n-- 14. direct pool swap 223-223  + convert + deploy GAS calc:')
@@ -1065,7 +1089,7 @@ async function main() {
             const bytes = ethers.getBytes(data)
             const tx = await token223Contract.connect(signer_wallet)
                 // ['transfer(address,uint256,bytes)'](poolContract.target, amount1int, bytes, {gasLimit: 8_000_000});
-                ['transfer(address,uint256,bytes)'].estimateGas(poolContract.target, amount1int, bytes, {gasLimit: 8_000_000});
+                ['transfer(address,uint256,bytes)'].estimateGas(poolContract.target, amount1int, bytes, gas);
             console.log(`gas usage: ${tx}`);
         } catch (e) {
             console.error('-- direct pool swap 223-223 GAS calc FAIL');
@@ -1119,7 +1143,7 @@ async function main() {
         try {
             const tx = await alFreeContract
                 .connect(signer_wallet)
-                .list.estimateGas(pool, 3000, pool, {gasLimit: 8_000_000});
+                .list.estimateGas(pool, 3000, pool, gas);
             console.log(`gas usage: ${tx}`);
         } catch (e) {
             console.error('-- free autolisting add list  GAS calc FAIL');
@@ -1133,7 +1157,7 @@ async function main() {
 
         try {
             // set price
-            const res = await alPaidContract.getPrices();
+            const res = await alPaidContract.connect(signer_wallet).getPrices();
             if (res.length > 0) {
                 // await mintApproveToken(token0address, BigInt(amount0int.toString()), signer_wallet, alPaidContract.target.toString());
             } else {
@@ -1148,7 +1172,7 @@ async function main() {
             // Approve token
             const tx = await alPaidContract
                 .connect(signer_wallet)
-                .list.estimateGas(pool, 3000, token0address, {gasLimit: 8_000_000});
+                .list.estimateGas(pool, 3000, token0address, gas);
             console.log(`gas usage: ${tx}`);
         } catch (e) {
             console.error('-- paid autolisting add list  GAS calc FAIL');
