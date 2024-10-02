@@ -15,7 +15,7 @@
       "isNative": false,
       "isToken": true,
       "address0": "0x8F5Ea3D9b780da2D0Ab6517ac4f6E697A948794f",
-      "address1": "0xE36231fe26e8fB44Cf82687926061d65C0989196",
+      "address1": "0x338E270747034F83477DAdF054FAC0d9F1e00C3F",
       "logoURI": "/tokens/placeholder.svg"
     },
     {
@@ -26,7 +26,7 @@
       "isNative": false,
       "isToken": true,
       "address0": "0xc676e76573267cc2E053BE8637Ba71d6BA321195",
-      "address1": "0x8F5E713C536a63f8af3B63cE3DC08cd3fF4bc668",
+      "address1": "0x76e8CC22297972F5861B13B1b95a8f2b83B78547",
       "logoURI": "/tokens/placeholder.svg"
     },
     {
@@ -37,7 +37,7 @@
       "isNative": false,
       "isToken": true,
       "address0": "0xD0c00cC7Ec5c78557BeAf61A3dD15bdA1b8c7325",
-      "address1": "0xAECA90047E842e9cf5143CC2437A3FF1AFBbeEaa",
+      "address1": "0x759cb4E1b5F0e29c53ec1b4DE51Bf4de0A3a7913",
       "logoURI": "/tokens/placeholder.svg"
     },
     {
@@ -48,7 +48,7 @@
       "isNative": false,
       "isToken": true,
       "address0": "0xe39c469BeA1D805E02A31E9d8d2D78A379F2A099",
-      "address1": "0x73b73d577Ea52F0df39Aaa3554F1D1504501bbAe",
+      "address1": "0x4eF6649aE9732480e6e7a8dc68f778Cc4f4D2a70",
       "logoURI": "/tokens/placeholder.svg"
     },
     {
@@ -59,7 +59,7 @@
       "isNative": false,
       "isToken": true,
       "address0": "0xEC5aa08386F4B20dE1ADF9Cdf225b71a133FfaBa",
-      "address1": "0xE201F9a4ed6e165FC259143F419782039AE0C3E0",
+      "address1": "0x510EaA9BfF348673A72784Bce68020E96fa53E8B",
       "logoURI": "/tokens/placeholder.svg"
     }
   ]

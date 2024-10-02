@@ -1,7 +1,7 @@
 {
   "contractFile": "dex223/PoolLibrary",
   "contractName": "PoolLibrary",
-  "contractAddress": "0xe831FDB60Dc18c264f1B45cadAFD5f2f2993EE83",
+  "contractAddress": "0x2f404E8BD5319BEbB789C3d3b58FA3643799e3cF",
   "abi": [
     {
       "type": "event",

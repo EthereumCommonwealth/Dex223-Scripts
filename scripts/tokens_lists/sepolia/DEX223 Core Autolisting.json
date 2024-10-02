@@ -15,7 +15,7 @@
       "isNative": false,
       "isToken": true,
       "address0": "0x8F5Ea3D9b780da2D0Ab6517ac4f6E697A948794f",
-      "address1": "0xE36231fe26e8fB44Cf82687926061d65C0989196",
+      "address1": "0x338E270747034F83477DAdF054FAC0d9F1e00C3F",
       "logoURI": "/tokens/placeholder.svg"
     },
     {
@@ -26,7 +26,18 @@
       "isNative": false,
       "isToken": true,
       "address0": "0xEC5aa08386F4B20dE1ADF9Cdf225b71a133FfaBa",
-      "address1": "0xE201F9a4ed6e165FC259143F419782039AE0C3E0",
+      "address1": "0x510EaA9BfF348673A72784Bce68020E96fa53E8B",
+      "logoURI": "/tokens/placeholder.svg"
+    },
+    {
+      "chainId": 11155111,
+      "decimals": 18,
+      "symbol": "NT23",
+      "name": "Native ERC223 token",
+      "isNative": false,
+      "isToken": true,
+      "address0": "0x277151b9b0faC770230783f9167C0a75095d1E26",
+      "address1": "0x93D8346D062C00aa1D8CDF9Bd2Ff90F8b01B0452",
       "logoURI": "/tokens/placeholder.svg"
     }
   ]

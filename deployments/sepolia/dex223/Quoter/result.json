@@ -1,7 +1,7 @@
 {
   "contractFile": "dex223/Quoter",
   "contractName": "Quoter",
-  "contractAddress": "0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6",
+  "contractAddress": "0x757e8D27B366153161d0990d82F7661835802083",
   "abi": [
     {
       "type": "constructor",

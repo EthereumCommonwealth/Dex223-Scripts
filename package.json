@@ -57,6 +57,7 @@
     "copyFolder": "copyfiles -u 2 './node_modules/dex223-contracts/contracts/**/*' '.'",
     "hardhat:node": "hardhat node",
     "hardhat:compile": "hardhat compile",
+    "hardhat:compile:force": "hardhat compile --force",
     "hardhat:setup:data:local": "hardhat run --network localhost scripts/setupFakeData.ts",
     "hardhat:deploy:local": "npm run rmdir -- artifacts cache deployments/localhost && hardhat run --network localhost scripts/deploy.ts",
     "hardhat:deploy:sepolia": "hardhat run --network sepolia scripts/deploy.ts",

@@ -1,7 +1,7 @@
 {
   "contractFile": "dex223/DexaransNonfungiblePositionManager",
   "contractName": "DexaransNonfungiblePositionManager",
-  "contractAddress": "0x044845FB22B4258d83a6c24b2fB061AFEba7e5b9",
+  "contractAddress": "0x9cCF60dDE926FB2579209bb0D6C00C8Cc873A458",
   "abi": [
     {
       "type": "constructor",

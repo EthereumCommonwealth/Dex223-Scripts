@@ -1,7 +1,7 @@
 {
   "contractFile": "dex223/AddressHelper",
   "contractName": "AddressHelper",
-  "contractAddress": "0x22cD7407eB4cE475AeC9769fDF229b1046C891C0",
+  "contractAddress": "0xc9e8FDcCb861623685458cD825537e74E22F99e0",
   "abi": [
     {
       "type": "function",

@@ -14,7 +14,7 @@ import fs from 'fs';
 import path from 'path';
 import JSBI from "jsbi";
 import { encodePriceSqrt } from "./createPool";
-import { getPoolData } from "./addLiquidity";
+import { getPoolData } from "./helpers/utilities";
 import { nearestUsableTick, Pool, Position } from "@uniswap/v3-sdk";
 import { Token } from "@uniswap/sdk-core";
 
@@ -239,7 +239,7 @@ async function addLiquidity(
 
     const tx = await nfpm
         .connect(signer_wallet)
-        .mint(params, { gasLimit: 8_000_000 });
+        .mint(params);//, { gasLimit: 8_000_000 });
     await tx.wait();
 }
 
@@ -317,8 +317,8 @@ async function main() {
     const tokensLists = await readAndParseJsonFiles(path.join(folderPath, netName));
     const tokens = flatternTokens(tokensLists, chainId);
     // console.dir(tokens);
+    
     const fee = Number(process.env.POOL_FEE || '3000');
-
     console.log(`Generating pools for ChainId: ${chainId} with fee = ${fee}`);
 
     // NOTE swap sepolia | localhost based on call settings
@@ -342,16 +342,18 @@ async function main() {
     for (let token0 of tokens) {
         for (let token1 of tokens) {
             if (token0.address === token1.address) continue;
-            // NOTE skip WBNB
-            if ([token0.address.toLowerCase(), token1.address.toLowerCase()].includes('0x094616f0bdfb0b526bd735bf66eca0ad254ca81f') ) continue;
+            // NOTE skip WETH & NT23
+            if (([token0.address.toLowerCase(), token1.address.toLowerCase()].includes('0xae13d989dac2f0debff460ac112a837c89baa7cd')) // ) continue;
+                || ([token0.address.toLowerCase(), token1.address.toLowerCase()].includes('0x277151b9b0fac770230783f9167c0a75095d1e26')) ) continue;
             console.log('-< -- >-');
 
             const pool = await factoryContract.getPool(token0.address, token1.address, fee);
-            if (pool !== ethers.ZeroAddress) {//} && pool !== '0x7DF57857AEb300D0EcA3f7B10FbE70E8e6E87D5e') {
+            // console.log(pool);
+            // console.log(ethers.ZeroAddress);
+            if (pool !== ethers.ZeroAddress && pool !== '0x67AeDBA21F30738C99F02da4C53876E422FB8889') {
                 console.log(`Exists Pool: ${token0.symbol} | ${token1.symbol}: ${pool}`);
                 continue;
             }
-
 
             if (pool === ethers.ZeroAddress) {
                 await deployPool(token0, token1, fee, nfpmContract, Number(chainId));
@@ -364,7 +366,7 @@ async function main() {
                 console.log(`Liquidity added: ${token0.symbol} | ${token1.symbol}: ${address}`);
             }
 
-            // process.exit(0);
+            process.exit(0);
         }
     }
 }

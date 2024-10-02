@@ -1,7 +1,7 @@
 {
   "contractFile": "dex223/Factory",
   "contractName": "Factory",
-  "contractAddress": "0x9f3118af733Ea3Fe4f9Ed71033F25B6bcF7F49e9",
+  "contractAddress": "0x8524c3bD49Cd455EA0102BF194AdD2F21165E049",
   "abi": [
     {
       "type": "constructor",

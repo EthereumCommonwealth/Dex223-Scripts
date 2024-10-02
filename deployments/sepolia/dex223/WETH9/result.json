@@ -1,7 +1,7 @@
 {
   "contractFile": "dex223/WETH9",
   "contractName": "WETH9",
-  "contractAddress": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+  "contractAddress": "0xfff9976782d46cc05630d1f6ebab18b2324d6b14",
   "abi": [
     {
       "type": "function",

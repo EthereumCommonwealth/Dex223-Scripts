@@ -1,7 +1,7 @@
 {
   "contractFile": "dex223/TokenConvertor",
   "contractName": "TokenConvertor",
-  "contractAddress": "0xdd90b13bcb92950ca9b6b3e0407d439533ea0df2",
+  "contractAddress": "0x18EEdef5d3D21C2828Ca8557BeF7210Bfa481bC2",
   "abi": [
     {
       "type": "event",
