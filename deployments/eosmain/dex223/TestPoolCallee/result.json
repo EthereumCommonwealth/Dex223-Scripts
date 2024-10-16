@@ -1,0 +1,318 @@
+{
+  "contractFile": "dex223/TestPoolCallee",
+  "contractName": "TestPoolCallee",
+  "contractAddress": "0xa513E6E4b8f2a923D98304ec87F64353C4D5C853",
+  "abi": [
+    {
+      "type": "event",
+      "anonymous": false,
+      "name": "MintCallback",
+      "inputs": [
+        {
+          "type": "uint256",
+          "name": "amount0Owed",
+          "indexed": false
+        },
+        {
+          "type": "uint256",
+          "name": "amount1Owed",
+          "indexed": false
+        }
+      ]
+    },
+    {
+      "type": "event",
+      "anonymous": false,
+      "name": "SwapCallback",
+      "inputs": [
+        {
+          "type": "int256",
+          "name": "amount0Delta",
+          "indexed": false
+        },
+        {
+          "type": "int256",
+          "name": "amount1Delta",
+          "indexed": false
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "call_sender",
+      "constant": true,
+      "stateMutability": "view",
+      "payable": false,
+      "inputs": [],
+      "outputs": [
+        {
+          "type": "address",
+          "name": ""
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "depositedTokens",
+      "constant": true,
+      "stateMutability": "view",
+      "payable": false,
+      "inputs": [
+        {
+          "type": "address",
+          "name": "_user"
+        },
+        {
+          "type": "address",
+          "name": "_token"
+        }
+      ],
+      "outputs": [
+        {
+          "type": "uint256",
+          "name": ""
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "mint",
+      "constant": false,
+      "payable": false,
+      "inputs": [
+        {
+          "type": "address",
+          "name": "pool"
+        },
+        {
+          "type": "address",
+          "name": "recipient"
+        },
+        {
+          "type": "int24",
+          "name": "tickLower"
+        },
+        {
+          "type": "int24",
+          "name": "tickUpper"
+        },
+        {
+          "type": "uint128",
+          "name": "amount"
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "type": "function",
+      "name": "swap0ForExact1",
+      "constant": false,
+      "payable": false,
+      "inputs": [
+        {
+          "type": "address",
+          "name": "pool"
+        },
+        {
+          "type": "uint256",
+          "name": "amount1Out"
+        },
+        {
+          "type": "address",
+          "name": "recipient"
+        },
+        {
+          "type": "uint160",
+          "name": "sqrtPriceLimitX96"
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "type": "function",
+      "name": "swap1ForExact0",
+      "constant": false,
+      "payable": false,
+      "inputs": [
+        {
+          "type": "address",
+          "name": "pool"
+        },
+        {
+          "type": "uint256",
+          "name": "amount0Out"
+        },
+        {
+          "type": "address",
+          "name": "recipient"
+        },
+        {
+          "type": "uint160",
+          "name": "sqrtPriceLimitX96"
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "type": "function",
+      "name": "swapExact0For1",
+      "constant": false,
+      "payable": false,
+      "inputs": [
+        {
+          "type": "address",
+          "name": "pool"
+        },
+        {
+          "type": "uint256",
+          "name": "amount0In"
+        },
+        {
+          "type": "address",
+          "name": "recipient"
+        },
+        {
+          "type": "uint160",
+          "name": "sqrtPriceLimitX96"
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "type": "function",
+      "name": "swapExact1For0",
+      "constant": false,
+      "payable": false,
+      "inputs": [
+        {
+          "type": "address",
+          "name": "pool"
+        },
+        {
+          "type": "uint256",
+          "name": "amount1In"
+        },
+        {
+          "type": "address",
+          "name": "recipient"
+        },
+        {
+          "type": "uint160",
+          "name": "sqrtPriceLimitX96"
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "type": "function",
+      "name": "swapToHigherSqrtPrice",
+      "constant": false,
+      "payable": false,
+      "inputs": [
+        {
+          "type": "address",
+          "name": "pool"
+        },
+        {
+          "type": "uint160",
+          "name": "sqrtPriceX96"
+        },
+        {
+          "type": "address",
+          "name": "recipient"
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "type": "function",
+      "name": "swapToLowerSqrtPrice",
+      "constant": false,
+      "payable": false,
+      "inputs": [
+        {
+          "type": "address",
+          "name": "pool"
+        },
+        {
+          "type": "uint160",
+          "name": "sqrtPriceX96"
+        },
+        {
+          "type": "address",
+          "name": "recipient"
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "type": "function",
+      "name": "tokenReceived",
+      "constant": false,
+      "payable": false,
+      "inputs": [
+        {
+          "type": "address",
+          "name": "_from"
+        },
+        {
+          "type": "uint256",
+          "name": "_value"
+        },
+        {
+          "type": "bytes",
+          "name": "_data"
+        }
+      ],
+      "outputs": [
+        {
+          "type": "bytes4",
+          "name": ""
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "uniswapV3MintCallback",
+      "constant": false,
+      "payable": false,
+      "inputs": [
+        {
+          "type": "uint256",
+          "name": "amount0Owed"
+        },
+        {
+          "type": "uint256",
+          "name": "amount1Owed"
+        },
+        {
+          "type": "bytes",
+          "name": "data"
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "type": "function",
+      "name": "uniswapV3SwapCallback",
+      "constant": false,
+      "payable": false,
+      "inputs": [
+        {
+          "type": "int256",
+          "name": "amount0Delta"
+        },
+        {
+          "type": "int256",
+          "name": "amount1Delta"
+        },
+        {
+          "type": "bytes",
+          "name": "data"
+        }
+      ],
+      "outputs": []
+    }
+  ],
+  "startBlock": 8
+}

@@ -1,0 +1,424 @@
+{
+  "contractFile": "dex223/AutoListFree",
+  "contractName": "AutoListFree",
+  "contractAddress": "0x5bf0FD2874B54CD42a7b7F19E98a2AdA8c9A756d",
+  "abi": [
+    {
+      "type": "constructor",
+      "stateMutability": "undefined",
+      "payable": false,
+      "inputs": [
+        {
+          "type": "address",
+          "name": "_factory"
+        },
+        {
+          "type": "address",
+          "name": "_registry"
+        },
+        {
+          "type": "string",
+          "name": "_name"
+        },
+        {
+          "type": "string",
+          "name": "_URL"
+        }
+      ]
+    },
+    {
+      "type": "event",
+      "anonymous": false,
+      "name": "PairListed",
+      "inputs": [
+        {
+          "type": "address",
+          "name": "token0_erc20",
+          "indexed": true
+        },
+        {
+          "type": "address",
+          "name": "token0_erc223",
+          "indexed": false
+        },
+        {
+          "type": "address",
+          "name": "token1_erc20",
+          "indexed": true
+        },
+        {
+          "type": "address",
+          "name": "token1_erc223",
+          "indexed": false
+        },
+        {
+          "type": "address",
+          "name": "pool",
+          "indexed": true
+        },
+        {
+          "type": "uint256",
+          "name": "feeTier",
+          "indexed": false
+        }
+      ]
+    },
+    {
+      "type": "event",
+      "anonymous": false,
+      "name": "TokenListed",
+      "inputs": [
+        {
+          "type": "address",
+          "name": "token_erc20",
+          "indexed": true
+        },
+        {
+          "type": "address",
+          "name": "token_erc223",
+          "indexed": true
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "extractTokens",
+      "constant": false,
+      "payable": false,
+      "inputs": [
+        {
+          "type": "address",
+          "name": "_token"
+        },
+        {
+          "type": "uint256",
+          "name": "_amount"
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "type": "function",
+      "name": "getFactory",
+      "constant": true,
+      "stateMutability": "view",
+      "payable": false,
+      "inputs": [],
+      "outputs": [
+        {
+          "type": "address",
+          "name": ""
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "getName",
+      "constant": true,
+      "stateMutability": "view",
+      "payable": false,
+      "inputs": [],
+      "outputs": [
+        {
+          "type": "string",
+          "name": ""
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "getPrices",
+      "constant": true,
+      "stateMutability": "view",
+      "payable": false,
+      "inputs": [],
+      "outputs": [
+        {
+          "type": "tuple[]",
+          "name": "",
+          "components": [
+            {
+              "type": "address",
+              "name": "token"
+            },
+            {
+              "type": "uint256",
+              "name": "price"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "getRegistry",
+      "constant": true,
+      "stateMutability": "view",
+      "payable": false,
+      "inputs": [],
+      "outputs": [
+        {
+          "type": "address",
+          "name": ""
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "getToken",
+      "constant": true,
+      "stateMutability": "view",
+      "payable": false,
+      "inputs": [
+        {
+          "type": "uint256",
+          "name": "index"
+        }
+      ],
+      "outputs": [
+        {
+          "type": "address",
+          "name": "_erc20"
+        },
+        {
+          "type": "address",
+          "name": "_erc223"
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "getURL",
+      "constant": true,
+      "stateMutability": "view",
+      "payable": false,
+      "inputs": [],
+      "outputs": [
+        {
+          "type": "string",
+          "name": ""
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "isListed",
+      "constant": true,
+      "stateMutability": "view",
+      "payable": false,
+      "inputs": [
+        {
+          "type": "address",
+          "name": "_token"
+        }
+      ],
+      "outputs": [
+        {
+          "type": "bool",
+          "name": ""
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "last_update",
+      "constant": true,
+      "stateMutability": "view",
+      "payable": false,
+      "inputs": [],
+      "outputs": [
+        {
+          "type": "uint256",
+          "name": ""
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "list",
+      "constant": false,
+      "stateMutability": "payable",
+      "payable": true,
+      "inputs": [
+        {
+          "type": "address",
+          "name": "pool"
+        },
+        {
+          "type": "uint24",
+          "name": "feeTier"
+        },
+        {
+          "type": "address",
+          "name": "paymentToken"
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "type": "function",
+      "name": "listed_tokens",
+      "constant": true,
+      "stateMutability": "view",
+      "payable": false,
+      "inputs": [
+        {
+          "type": "address",
+          "name": ""
+        }
+      ],
+      "outputs": [
+        {
+          "type": "uint256",
+          "name": ""
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "name",
+      "constant": true,
+      "stateMutability": "view",
+      "payable": false,
+      "inputs": [],
+      "outputs": [
+        {
+          "type": "string",
+          "name": ""
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "num_listed_tokens",
+      "constant": true,
+      "stateMutability": "view",
+      "payable": false,
+      "inputs": [],
+      "outputs": [
+        {
+          "type": "uint256",
+          "name": ""
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "owner",
+      "constant": true,
+      "stateMutability": "view",
+      "payable": false,
+      "inputs": [],
+      "outputs": [
+        {
+          "type": "address",
+          "name": ""
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "pairs",
+      "constant": true,
+      "stateMutability": "view",
+      "payable": false,
+      "inputs": [
+        {
+          "type": "uint256",
+          "name": ""
+        }
+      ],
+      "outputs": [
+        {
+          "type": "address",
+          "name": "token1_erc20"
+        },
+        {
+          "type": "address",
+          "name": "token2_erc20"
+        },
+        {
+          "type": "address",
+          "name": "token1_erc223"
+        },
+        {
+          "type": "address",
+          "name": "token2_erc223"
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "setPaymentPrice",
+      "constant": false,
+      "payable": false,
+      "inputs": [
+        {
+          "type": "address",
+          "name": "paymentToken"
+        },
+        {
+          "type": "uint256",
+          "name": "price"
+        }
+      ],
+      "outputs": [
+        {
+          "type": "bool",
+          "name": ""
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "tokens",
+      "constant": true,
+      "stateMutability": "view",
+      "payable": false,
+      "inputs": [
+        {
+          "type": "uint256",
+          "name": ""
+        }
+      ],
+      "outputs": [
+        {
+          "type": "address",
+          "name": "erc20"
+        },
+        {
+          "type": "address",
+          "name": "erc223"
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "updateMe",
+      "constant": false,
+      "payable": false,
+      "inputs": [
+        {
+          "type": "string",
+          "name": "_newURL"
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "type": "function",
+      "name": "url",
+      "constant": true,
+      "stateMutability": "view",
+      "payable": false,
+      "inputs": [],
+      "outputs": [
+        {
+          "type": "string",
+          "name": ""
+        }
+      ]
+    }
+  ],
+  "startBlock": 11
+}

@@ -1,0 +1,149 @@
+{
+  "contractFile": "dex223/AutoListRegistry",
+  "contractName": "AutoListRegistry",
+  "contractAddress": "0x4F55aF4162FBA4505D459d3B3Fd1926391F18349",
+  "abi": [
+    {
+      "type": "event",
+      "anonymous": false,
+      "name": "ListingContractUpdated",
+      "inputs": [
+        {
+          "type": "address",
+          "name": "_autolisting",
+          "indexed": true
+        },
+        {
+          "type": "address",
+          "name": "_owner",
+          "indexed": false
+        },
+        {
+          "type": "string",
+          "name": "_url",
+          "indexed": false
+        },
+        {
+          "type": "bytes",
+          "name": "_metadata",
+          "indexed": false
+        }
+      ]
+    },
+    {
+      "type": "event",
+      "anonymous": false,
+      "name": "ListingPrice",
+      "inputs": [
+        {
+          "type": "address",
+          "name": "_autolisting",
+          "indexed": true
+        },
+        {
+          "type": "address",
+          "name": "_token",
+          "indexed": true
+        },
+        {
+          "type": "uint256",
+          "name": "_price",
+          "indexed": false
+        }
+      ]
+    },
+    {
+      "type": "event",
+      "anonymous": false,
+      "name": "TokenListed",
+      "inputs": [
+        {
+          "type": "address",
+          "name": "_listedBy",
+          "indexed": true
+        },
+        {
+          "type": "address",
+          "name": "_tokenERC20",
+          "indexed": true
+        },
+        {
+          "type": "address",
+          "name": "_tokenERC223",
+          "indexed": true
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "recordListing",
+      "constant": false,
+      "payable": false,
+      "inputs": [
+        {
+          "type": "address",
+          "name": "_tokenERC20"
+        },
+        {
+          "type": "address",
+          "name": "_tokenERC223"
+        }
+      ],
+      "outputs": [
+        {
+          "type": "bool",
+          "name": ""
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "updateContractInfo",
+      "constant": false,
+      "payable": false,
+      "inputs": [
+        {
+          "type": "address",
+          "name": "_owner"
+        },
+        {
+          "type": "string",
+          "name": "_url"
+        },
+        {
+          "type": "bytes",
+          "name": "_metadata"
+        }
+      ],
+      "outputs": [
+        {
+          "type": "bool",
+          "name": ""
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "updateListingPrice",
+      "constant": false,
+      "payable": false,
+      "inputs": [
+        {
+          "type": "address",
+          "name": "_token"
+        },
+        {
+          "type": "uint256",
+          "name": "_price"
+        }
+      ],
+      "outputs": [
+        {
+          "type": "bool",
+          "name": ""
+        }
+      ]
+    }
+  ],
+  "startBlock": 10
+}

@@ -311,6 +311,7 @@ async function main() {
         case 11155111: netName = 'sepolia'; break;
         case 97: netName = 'tbnb'; break;
         case 15557: netName = 'eostest'; break;
+        case 17777: netName = 'eosmain'; break;
         default: netName = 'localhost';
     }
 
@@ -344,13 +345,14 @@ async function main() {
             if (token0.address === token1.address) continue;
             // NOTE skip WETH & NT23
             if (([token0.address.toLowerCase(), token1.address.toLowerCase()].includes('0xae13d989dac2f0debff460ac112a837c89baa7cd')) // ) continue;
-                || ([token0.address.toLowerCase(), token1.address.toLowerCase()].includes('0x277151b9b0fac770230783f9167c0a75095d1e26')) ) continue;
+                || ([token0.address.toLowerCase(), token1.address.toLowerCase()].includes('0x277151b9b0fac770230783f9167c0a75095d1e26'))
+                || ([token0.address.toLowerCase(), token1.address.toLowerCase()].includes('0xc00592aa41d32d137dc480d9f6d0df19b860104f')) ) continue;  // skip WEOS
             console.log('-< -- >-');
 
             const pool = await factoryContract.getPool(token0.address, token1.address, fee);
             // console.log(pool);
             // console.log(ethers.ZeroAddress);
-            if (pool !== ethers.ZeroAddress && pool !== '0x67AeDBA21F30738C99F02da4C53876E422FB8889') {
+            if (pool !== ethers.ZeroAddress) { //} && pool !== '0x67AeDBA21F30738C99F02da4C53876E422FB8889') {
                 console.log(`Exists Pool: ${token0.symbol} | ${token1.symbol}: ${pool}`);
                 continue;
             }

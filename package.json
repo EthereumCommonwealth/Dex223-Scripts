@@ -67,6 +67,7 @@
     "hardhat:pools:sepolia:3000": "POOL_FEE=3000 hardhat run --network sepolia scripts/poolsGenerator.ts",
     "hardhat:pools:tbnb:3000": "POOL_FEE=3000 hardhat run --network tbnb scripts/poolsGenerator.ts",
     "hardhat:pools:eostest:3000": "POOL_FEE=3000 hardhat run --network eostest scripts/poolsGenerator.ts",
+    "hardhat:pools:eosmain:3000": "POOL_FEE=3000 hardhat run --network eosmain scripts/poolsGenerator.ts",
     "hardhat:gastest:local": "hardhat run --network localhost scripts/gasTester.ts",
     "hardhat:gastest:sepolia": "hardhat run --network sepolia scripts/gasTester.ts",
     "hardhat:gastest:tbnb": "hardhat run --network tbnb scripts/gasTester.ts",

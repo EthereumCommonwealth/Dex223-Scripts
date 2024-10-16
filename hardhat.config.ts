@@ -190,6 +190,13 @@ const config: HardhatUserConfig = {
         mnemonic: MNEMONIC,
       },
     },
+    eosmain: {
+      url: "https://api.evm.eosnetwork.com",
+      chainId: 17777,
+      accounts: {
+        mnemonic: MNEMONIC,
+      },
+    },
   },
 };
 
